@@ -79,4 +79,7 @@ public enum NodeKind {
     AGENT,
     AGENT_CALL,
     CLASS_INIT,
+//
+//    VECTOR_KNOWLEDGE_BASE,
+//    MODEL_PROVIDER,
 }

@@ -62,7 +62,10 @@ public record Category(Metadata metadata, List<Item> items) implements Item {
         IMPORTED_TYPES("Imported Types", "Types imported from other integrations",
                 List.of("Imported", "Type", "Library")),
         AVAILABLE_TYPES("Available Types", "Types available in the library",
-                List.of("Available", "Type", "Library"));
+                List.of("Available", "Type", "Library")),
+        VECTOR_KNOWLEDGE_BASE("Vector Knowledge Base", "vector knowledge-bases available in the flow", null),
+        MODEL_PROVIDER("Model Provider", "The model-provider used in the flow to connect to an LLM", null),
+        AI("AI", "AI components available in the flow", null);
 
         final String name;
         final String description;

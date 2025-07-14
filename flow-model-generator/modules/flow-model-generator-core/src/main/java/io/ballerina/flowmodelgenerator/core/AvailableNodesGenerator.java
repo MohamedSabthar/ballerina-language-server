@@ -51,6 +51,7 @@ import io.ballerina.projects.Package;
 import io.ballerina.tools.text.LinePosition;
 import io.ballerina.tools.text.TextRange;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -95,6 +96,51 @@ public class AvailableNodesGenerator {
         }
         connections.sort(Comparator.comparing(connection -> connection.metadata().label()));
         this.rootBuilder.stepIn(Category.Name.CONNECTIONS).items(new ArrayList<>(connections)).stepOut();
+
+        Category vectorKnowledgeBase = new Category.Builder(null).name(Category.Name.VECTOR_KNOWLEDGE_BASE).build();
+        Category modelProviders = new Category.Builder(null).name(Category.Name.MODEL_PROVIDER).build();
+
+        AvailableNode npFunction = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(NPFunctionCall.LABEL)
+                        .description(NPFunctionCall.DESCRIPTION)
+                        .icon(Constants.NaturalFunctions.ICON)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.NP_FUNCTION)
+                        .build(),
+                true
+        );
+
+        AvailableNode agentCall = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(AgentBuilder.LABEL)
+                        .description(AgentBuilder.DESCRIPTION)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.AGENT_CALL)
+                        .org(BALLERINAX)
+                        .module(AI_AGENT)
+                        .packageName(AI_AGENT)
+                        .symbol("run")
+                        .object("Agent")
+                        .build(),
+                true
+        );
+
+        AvailableNode chunkers = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label("Chunkers")
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.FUNCTION_CALL)
+                        .build(),
+                true
+        );
+
+        this.rootBuilder.stepIn(Category.Name.AI)
+                .items(List.of(vectorKnowledgeBase, modelProviders, agentCall, npFunction, chunkers))
+                .stepOut();
 
         List<Item> items = new ArrayList<>();
         items.addAll(getAvailableFlowNodes(position));
@@ -160,41 +206,11 @@ public class AvailableNodesGenerator {
                 true
         );
 
-        AvailableNode npFunction = new AvailableNode(
-                new Metadata.Builder<>(null)
-                        .label(NPFunctionCall.LABEL)
-                        .description(NPFunctionCall.DESCRIPTION)
-                        .icon(Constants.NaturalFunctions.ICON)
-                        .build(),
-                new Codedata.Builder<>(null)
-                        .node(NodeKind.NP_FUNCTION)
-                        .build(),
-                true
-        );
-
-        AvailableNode agentCall = new AvailableNode(
-                new Metadata.Builder<>(null)
-                        .label(AgentBuilder.LABEL)
-                        .description(AgentBuilder.DESCRIPTION)
-                        .build(),
-                new Codedata.Builder<>(null)
-                        .node(NodeKind.AGENT_CALL)
-                        .org(BALLERINAX)
-                        .module(AI_AGENT)
-                        .packageName(AI_AGENT)
-                        .symbol("run")
-                        .object("Agent")
-                        .build(),
-                true
-        );
-
         this.rootBuilder.stepIn(Category.Name.STATEMENT)
                 .node(NodeKind.VARIABLE)
                 .node(NodeKind.ASSIGN)
                 .node(function)
-                .node(NodeKind.DATA_MAPPER_CALL)
-                .node(npFunction)
-                .node(agentCall);
+                .node(NodeKind.DATA_MAPPER_CALL);
 
         this.rootBuilder.stepIn(Category.Name.CONTROL)
                 .node(NodeKind.IF)
