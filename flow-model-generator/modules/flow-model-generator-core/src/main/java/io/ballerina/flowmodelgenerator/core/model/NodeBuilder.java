@@ -107,6 +107,8 @@ public abstract class NodeBuilder implements DiagnosticHandler.DiagnosticCapable
         put(NodeKind.AGENT_CALL, AgentCallBuilder::new);
         put(NodeKind.CLASS_INIT, ClassInitBuilder::new);
         put(NodeKind.MODEL_PROVIDER, ModelProviderBuilder::new);
+        put(NodeKind.EMBEDDING_PROVIDER, EmbeddingProviderBuilder::new);
+
     }};
 
     public static NodeBuilder getNodeFromKind(NodeKind kind) {

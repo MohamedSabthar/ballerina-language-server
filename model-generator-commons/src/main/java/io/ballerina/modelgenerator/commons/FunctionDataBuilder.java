@@ -333,7 +333,7 @@ public class FunctionDataBuilder {
                 functionSymbol(fetchedSymbol);
             } else {
                 // Fetch the init method if it is a connection
-                if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
+                if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
                     if (parentSymbol.kind() != SymbolKind.CLASS ||
                             !parentSymbol.qualifiers().contains(Qualifier.CLIENT)) {
                         throw new IllegalStateException("The connector should be a client class");
@@ -452,7 +452,8 @@ public class FunctionDataBuilder {
         Optional<TypeSymbol> returnTypeSymbol = functionTypeSymbol.returnTypeDescriptor();
         String returnType = returnTypeSymbol
                 .map(typeSymbol -> {
-                    if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
+                    if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT
+                            || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
                         return CommonUtils.getClassType(moduleInfo.moduleName(),
                                 parentSymbol.getName().orElse("Client"));
                     }
@@ -997,7 +998,9 @@ public class FunctionDataBuilder {
 
     private String getFunctionName() {
         // Get the client name if it is the init method of the client
-        if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
+        if (functionKind == FunctionData.Kind.CONNECTOR
+                || functionKind == FunctionData.Kind.MODEL_PROVIDER
+                || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
             if (parentSymbolType != null) {
                 return parentSymbolType;
             }
