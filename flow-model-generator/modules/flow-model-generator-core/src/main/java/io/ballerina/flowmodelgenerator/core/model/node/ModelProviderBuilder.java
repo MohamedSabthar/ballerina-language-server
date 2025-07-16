@@ -79,7 +79,6 @@ public class ModelProviderBuilder extends CallBuilder {
                 .moduleInfo(new ModuleInfo(codedata.org(), codedata.packageName(), codedata.module(),
                         codedata.version()))
                 .lsClientLogger(context.lsClientLogger())
-//                .functionResultKind(FunctionData.Kind.CONNECTOR)
                 .functionResultKind(FunctionData.Kind.MODEL_PROVIDER)
 
                 .userModuleInfo(moduleInfo);
@@ -92,7 +91,6 @@ public class ModelProviderBuilder extends CallBuilder {
                         functionData.version()));
         codedata()
                 .node(NodeKind.MODEL_PROVIDER)
-//                .node(NodeKind.NEW_CONNECTION)
                 .org(functionData.org())
                 .module(functionData.moduleName())
                 .packageName(functionData.packageName())

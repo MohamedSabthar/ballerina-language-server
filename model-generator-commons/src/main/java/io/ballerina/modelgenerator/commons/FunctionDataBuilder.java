@@ -452,7 +452,7 @@ public class FunctionDataBuilder {
         Optional<TypeSymbol> returnTypeSymbol = functionTypeSymbol.returnTypeDescriptor();
         String returnType = returnTypeSymbol
                 .map(typeSymbol -> {
-                    if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT) {
+                    if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
                         return CommonUtils.getClassType(moduleInfo.moduleName(),
                                 parentSymbol.getName().orElse("Client"));
                     }
