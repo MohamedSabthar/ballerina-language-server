@@ -133,6 +133,7 @@ public class FunctionData {
     public enum Kind {
         FUNCTION,
         CONNECTOR,
+        MODEL_PROVIDER,
         REMOTE,
         RESOURCE,
         LISTENER_INIT,

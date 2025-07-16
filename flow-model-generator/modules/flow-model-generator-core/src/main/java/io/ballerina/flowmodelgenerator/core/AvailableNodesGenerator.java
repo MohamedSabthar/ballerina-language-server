@@ -40,8 +40,7 @@ import io.ballerina.flowmodelgenerator.core.model.Item;
 import io.ballerina.flowmodelgenerator.core.model.Metadata;
 import io.ballerina.flowmodelgenerator.core.model.NodeBuilder;
 import io.ballerina.flowmodelgenerator.core.model.NodeKind;
-import io.ballerina.flowmodelgenerator.core.model.node.AgentBuilder;
-import io.ballerina.flowmodelgenerator.core.model.node.NPFunctionCall;
+import io.ballerina.flowmodelgenerator.core.model.node.*;
 import io.ballerina.modelgenerator.commons.CommonUtils;
 import io.ballerina.modelgenerator.commons.FunctionData;
 import io.ballerina.modelgenerator.commons.FunctionDataBuilder;
@@ -51,7 +50,6 @@ import io.ballerina.projects.Package;
 import io.ballerina.tools.text.LinePosition;
 import io.ballerina.tools.text.TextRange;
 
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +72,7 @@ public class AvailableNodesGenerator {
     private static final List<String> HTTP_REMOTE_METHOD_SKIP_LIST = List.of("get", "put", "post", "head",
             "delete", "patch", "options");
     private static final String BALLERINAX = "ballerinax";
-    public static final String AI_AGENT = "ai";
+    public static final String AI_MODULE_NAME = "ai";
 
     public AvailableNodesGenerator(SemanticModel semanticModel, Document document, Package pkg) {
         this.rootBuilder = new Category.Builder(null).name(Category.Name.ROOT);
@@ -86,19 +84,107 @@ public class AvailableNodesGenerator {
 
     public JsonArray getAvailableNodes(LinePosition position) {
         List<Category> connections = new ArrayList<>();
+        //temp
+        List<Category> modelProviders = new ArrayList<>();
+        List<Category> kbs = new ArrayList<>();
+        List<Category> ebs = new ArrayList<>();
+        List<Category> vecs = new ArrayList<>();
+
         List<Symbol> symbols = semanticModel.visibleSymbols(document, position);
         for (Symbol symbol : symbols) {
             Optional<Category> connection = getConnection(symbol);
-            if (connection.isEmpty()) {
-                continue;
-            }
-            connections.add(connection.get());
+            connection.ifPresent(connections::add);
+            // temp
+            Optional<Category> modelProvider = getModelProvider(symbol);
+            modelProvider.ifPresent(modelProviders::add);
+            Optional<Category> kb = getKnowledgeBase(symbol);
+            kb.ifPresent(kbs::add);
+            var eb = getEmbeddingProvider(symbol);
+            eb.ifPresent(ebs::add);
+            var vec = getVectorStore(symbol);
+            vec.ifPresent(vecs::add);
         }
         connections.sort(Comparator.comparing(connection -> connection.metadata().label()));
         this.rootBuilder.stepIn(Category.Name.CONNECTIONS).items(new ArrayList<>(connections)).stepOut();
 
-        Category vectorKnowledgeBase = new Category.Builder(null).name(Category.Name.VECTOR_KNOWLEDGE_BASE).build();
-        Category modelProviders = new Category.Builder(null).name(Category.Name.MODEL_PROVIDER).build();
+        //temp
+        this.rootBuilder.stepIn("prov").items(new ArrayList<>(modelProviders)).stepOut();
+        this.rootBuilder.stepIn("kb").items(new ArrayList<>(kbs)).stepOut();
+        this.rootBuilder.stepIn("eb").items(new ArrayList<>(ebs)).stepOut();
+        this.rootBuilder.stepIn("vecs").items(new ArrayList<>(vecs)).stepOut();
+
+        List<Item> items = new ArrayList<>();
+        items.addAll(getAvailableFlowNodes(position));
+        items.addAll(LocalIndexCentral.getInstance().getFunctions());
+        return gson.toJsonTree(items).getAsJsonArray();
+    }
+
+    public JsonArray getAvailableModelProviders(LinePosition position) {
+        List<Category> modelProviders = new ArrayList<>();
+        List<Symbol> symbols = semanticModel.visibleSymbols(document, position);
+        for (Symbol symbol : symbols) {
+            Optional<Category> modelProvider = getModelProvider(symbol);
+            if (modelProvider.isEmpty()) {
+                continue;
+            }
+            modelProviders.add(modelProvider.get());
+        }
+        modelProviders.sort(Comparator.comparing(connection -> connection.metadata().label()));
+        List<Item> items = this.rootBuilder.stepIn(Category.Name.MODEL_PROVIDER).items(new ArrayList<>(modelProviders))
+                .stepOut().build().items();
+        return gson.toJsonTree(items).getAsJsonArray();
+    }
+
+    private List<Item> getAiNodes() {
+        AvailableNode vectorKnowledgeBase = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(KnowledgeBaseBuilder.LABEL)
+                        .description(KnowledgeBaseBuilder.DESCRIPTION)
+//                        .icon(Constants.NaturalFunctions.ICON)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.VECTOR_KNOWLEDGE_BASE)
+                        .build(),
+                true
+        );
+
+        AvailableNode vectorStore = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(VectorStoreBuilder.LABEL)
+                        .description(VectorStoreBuilder.DESCRIPTION)
+//                        .icon(Constants.NaturalFunctions.ICON)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.VECTOR_STORE)
+                        .build(),
+                true,
+                true
+        );
+
+        AvailableNode embeddingProvider = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(EmbeddingProviderBuilder.LABEL)
+                        .description(EmbeddingProviderBuilder.DESCRIPTION)
+//                        .icon(Constants.NaturalFunctions.ICON)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.EMBEDDING_PROVIDER)
+                        .build(),
+                true,
+                true
+        );
+
+        AvailableNode modelProvider = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label(ModelProviderBuilder.LABEL)
+                        .description(ModelProviderBuilder.DESCRIPTION)
+//                        .icon(Constants.NaturalFunctions.ICON)
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.MODEL_PROVIDER)
+                        .build(),
+                true
+        );
 
         AvailableNode npFunction = new AvailableNode(
                 new Metadata.Builder<>(null)
@@ -120,8 +206,8 @@ public class AvailableNodesGenerator {
                 new Codedata.Builder<>(null)
                         .node(NodeKind.AGENT_CALL)
                         .org(BALLERINAX)
-                        .module(AI_AGENT)
-                        .packageName(AI_AGENT)
+                        .module(AI_MODULE_NAME)
+                        .packageName(AI_MODULE_NAME)
                         .symbol("run")
                         .object("Agent")
                         .build(),
@@ -130,22 +216,20 @@ public class AvailableNodesGenerator {
 
         AvailableNode chunkers = new AvailableNode(
                 new Metadata.Builder<>(null)
-                        .label("Chunkers")
+                        .label("Recursive Document Chunker")
+//                        .icon("") // add an icon
                         .build(),
                 new Codedata.Builder<>(null)
-                        .node(NodeKind.FUNCTION_CALL)
-                        .build(),
+                        .node(NodeKind.FUNCTION_CALL).org(BALLERINA_ORG)
+                        .module(AI_MODULE_NAME)
+                        .packageName(AI_MODULE_NAME)
+                        .symbol("chunkDocumentRecursively")
+                        .build()
+                ,
                 true
         );
 
-        this.rootBuilder.stepIn(Category.Name.AI)
-                .items(List.of(vectorKnowledgeBase, modelProviders, agentCall, npFunction, chunkers))
-                .stepOut();
-
-        List<Item> items = new ArrayList<>();
-        items.addAll(getAvailableFlowNodes(position));
-        items.addAll(LocalIndexCentral.getInstance().getFunctions());
-        return gson.toJsonTree(items).getAsJsonArray();
+        return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, agentCall, vectorStore, embeddingProvider);
     }
 
     private List<Item> getAvailableFlowNodes(LinePosition cursorPosition) {
@@ -195,6 +279,11 @@ public class AvailableNodesGenerator {
     }
 
     private void setDefaultNodes() {
+        this.rootBuilder
+                .stepIn(Category.Name.AI)
+                .items(getAiNodes())
+                .stepOut();
+
         AvailableNode function = new AvailableNode(
                 new Metadata.Builder<>(null)
                         .label("Call Function")
@@ -221,21 +310,21 @@ public class AvailableNodesGenerator {
 
         this.rootBuilder
                 .stepIn(Category.Name.ERROR_HANDLING)
-                    .node(NodeKind.ERROR_HANDLER)
-                    .node(NodeKind.FAIL)
-                    .node(NodeKind.PANIC)
-                    .stepOut()
+                .node(NodeKind.ERROR_HANDLER)
+                .node(NodeKind.FAIL)
+                .node(NodeKind.PANIC)
+                .stepOut()
                 .stepIn(Category.Name.CONCURRENCY)
-                    .node(NodeKind.FORK)
-                    .node(NodeKind.PARALLEL_FLOW)
-                    .node(NodeKind.WAIT)
-                    .node(NodeKind.LOCK)
-                    .node(NodeKind.START)
-                    .node(NodeKind.TRANSACTION)
-                    .node(NodeKind.COMMIT)
-                    .node(NodeKind.ROLLBACK)
-                    .node(NodeKind.RETRY)
-                    .stepOut();
+                .node(NodeKind.FORK)
+                .node(NodeKind.PARALLEL_FLOW)
+                .node(NodeKind.WAIT)
+                .node(NodeKind.LOCK)
+                .node(NodeKind.START)
+                .node(NodeKind.TRANSACTION)
+                .node(NodeKind.COMMIT)
+                .node(NodeKind.ROLLBACK)
+                .node(NodeKind.RETRY)
+                .stepOut();
     }
 
     private void setStopNode(NonTerminalNode node) {
@@ -266,88 +355,175 @@ public class AvailableNodesGenerator {
 
     private Optional<Category> getConnection(Symbol symbol) {
         try {
-            TypeReferenceTypeSymbol typeDescriptorSymbol;
-            if (symbol instanceof VariableSymbol variableSymbol) {
-                typeDescriptorSymbol = (TypeReferenceTypeSymbol) variableSymbol.typeDescriptor();
-            } else if (symbol instanceof ParameterSymbol parameterSymbol) {
-                typeDescriptorSymbol = (TypeReferenceTypeSymbol) parameterSymbol.typeDescriptor();
-            } else {
+            Optional<ClassSymbol> classSymbol = getClassSymbol(symbol);
+            if (classSymbol.isEmpty() || !(classSymbol.get().qualifiers().contains(Qualifier.CLIENT))
+                    || isAiModelProvider(classSymbol.get()) || isAiEmbeddingProvider(classSymbol.get())) {
                 return Optional.empty();
             }
-
-            ClassSymbol classSymbol = (ClassSymbol) typeDescriptorSymbol.typeDescriptor();
-            if (!(classSymbol.qualifiers().contains(Qualifier.CLIENT))) {
-                return Optional.empty();
-            }
-            String parentSymbolName = symbol.getName().orElseThrow();
-            String className = classSymbol.getName().orElseThrow();
-            ModuleInfo moduleInfo = classSymbol.getModule()
-                    .map(moduleSymbol -> ModuleInfo.from(moduleSymbol.id()))
-                    .orElse(null);
-
-            FunctionDataBuilder functionDataBuilder = new FunctionDataBuilder()
-                    .parentSymbol(classSymbol)
-                    .parentSymbolType(className)
-                    .project(pkg.project())
-                    .moduleInfo(moduleInfo);
-
-            // Obtain methods of the connector
-            List<FunctionData> methodFunctionsData = functionDataBuilder.buildChildNodes();
-
-            List<Item> methods = new ArrayList<>();
-            for (FunctionData methodFunction : methodFunctionsData) {
-                String org = methodFunction.org();
-                String packageName = methodFunction.packageName();
-                String version = methodFunction.version();
-                boolean isHttpModule = org.equals(BALLERINA_ORG) && packageName.equals(HTTP_MODULE);
-
-                NodeBuilder nodeBuilder;
-                String label;
-                if (methodFunction.kind() == FunctionData.Kind.RESOURCE) {
-                    // TODO: Move this logic to the index
-                    if (isHttpModule && HTTP_REMOTE_METHOD_SKIP_LIST.contains(methodFunction.name())) {
-                        continue;
-                    }
-                    label = methodFunction.name() + (isHttpModule ? "" : methodFunction.resourcePath());
-                    nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.RESOURCE_ACTION_CALL);
-                } else {
-                    label = methodFunction.name();
-                    FunctionData.Kind kind = methodFunction.kind();
-                    if (kind == FunctionData.Kind.REMOTE) {
-                        nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.REMOTE_ACTION_CALL);
-                    } else if (kind == FunctionData.Kind.FUNCTION) {
-                        nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.METHOD_CALL);
-                    } else {
-                        throw new IllegalStateException("Unexpected value: " + kind);
-                    }
-                }
-
-                Item node = nodeBuilder
-                        .metadata()
-                            .label(label)
-                            .icon(CommonUtils.generateIcon(org, packageName, version))
-                            .description(methodFunction.description())
-                            .stepOut()
-                        .codedata()
-                            .org(org)
-                            .module(moduleInfo.moduleName())
-                            .packageName(moduleInfo.packageName())
-                            .object(className)
-                            .symbol(methodFunction.name())
-                            .version(version)
-                            .parentSymbol(parentSymbolName)
-                            .resourcePath(methodFunction.resourcePath())
-                            .stepOut()
-                        .buildAvailableNode();
-                methods.add(node);
-            }
-
-            Metadata metadata = new Metadata.Builder<>(null)
-                    .label(parentSymbolName)
-                    .build();
-            return Optional.of(new Category(metadata, methods));
+            return createCategory(symbol, classSymbol.get());
         } catch (RuntimeException ignored) {
             return Optional.empty();
         }
+    }
+
+    private Optional<Category> getModelProvider(Symbol symbol) {
+        try {
+            Optional<ClassSymbol> classSymbol = getClassSymbol(symbol);
+            if (classSymbol.isEmpty() || !(classSymbol.get().qualifiers().contains(Qualifier.CLIENT))
+                    || !isAiModelProvider(classSymbol.get())) {
+                return Optional.empty();
+            }
+            return createCategory(symbol, classSymbol.get());
+        } catch (RuntimeException ignored) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Category> getEmbeddingProvider(Symbol symbol) {
+        try {
+            Optional<ClassSymbol> classSymbol = getClassSymbol(symbol);
+            if (classSymbol.isEmpty() || !(classSymbol.get().qualifiers().contains(Qualifier.CLIENT))
+                    || !isAiEmbeddingProvider(classSymbol.get())) {
+                return Optional.empty();
+            }
+            return createCategory(symbol, classSymbol.get());
+        } catch (RuntimeException ignored) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Category> getKnowledgeBase(Symbol symbol) {
+        try {
+            Optional<ClassSymbol> classSymbol = getClassSymbol(symbol);
+            if (classSymbol.isEmpty() || !isAiKnowledgeBase(classSymbol.get())) {
+                return Optional.empty();
+            }
+            return createCategory(symbol, classSymbol.get());
+        } catch (RuntimeException ignored) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Category> getVectorStore(Symbol symbol) {
+        try {
+            Optional<ClassSymbol> classSymbol = getClassSymbol(symbol);
+            if (classSymbol.isEmpty() || !isAiVectorStore(classSymbol.get())) {
+                return Optional.empty();
+            }
+            return createCategory(symbol, classSymbol.get());
+        } catch (RuntimeException ignored) {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<ClassSymbol> getClassSymbol(Symbol symbol) {
+        TypeReferenceTypeSymbol typeDescriptorSymbol;
+        if (symbol instanceof VariableSymbol variableSymbol) {
+            typeDescriptorSymbol = (TypeReferenceTypeSymbol) variableSymbol.typeDescriptor();
+        } else if (symbol instanceof ParameterSymbol parameterSymbol) {
+            typeDescriptorSymbol = (TypeReferenceTypeSymbol) parameterSymbol.typeDescriptor();
+        } else {
+            return Optional.empty();
+        }
+        return Optional.of((ClassSymbol) typeDescriptorSymbol.typeDescriptor());
+    }
+
+    private Optional<Category> createCategory(Symbol parentSymbol, ClassSymbol classSymbol) {
+        String parentSymbolName = parentSymbol.getName().orElseThrow();
+        String className = classSymbol.getName().orElseThrow();
+        ModuleInfo moduleInfo = classSymbol.getModule()
+                .map(moduleSymbol -> ModuleInfo.from(moduleSymbol.id()))
+                .orElse(null);
+
+        FunctionDataBuilder functionDataBuilder = new FunctionDataBuilder()
+                .parentSymbol(classSymbol)
+                .parentSymbolType(className)
+                .project(pkg.project())
+                .moduleInfo(moduleInfo);
+
+        // Obtain methods of the clients
+        List<FunctionData> methodFunctionsData = functionDataBuilder.buildChildNodes();
+
+        List<Item> methods = new ArrayList<>();
+        for (FunctionData methodFunction : methodFunctionsData) {
+            String org = methodFunction.org();
+            String packageName = methodFunction.packageName();
+            String version = methodFunction.version();
+            boolean isHttpModule = org.equals(BALLERINA_ORG) && packageName.equals(HTTP_MODULE);
+
+            NodeBuilder nodeBuilder;
+            String label;
+            if (methodFunction.kind() == FunctionData.Kind.RESOURCE) {
+                // TODO: Move this logic to the index
+                if (isHttpModule && HTTP_REMOTE_METHOD_SKIP_LIST.contains(methodFunction.name())) {
+                    continue;
+                }
+                label = methodFunction.name() + (isHttpModule ? "" : methodFunction.resourcePath());
+                nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.RESOURCE_ACTION_CALL);
+            } else {
+                label = methodFunction.name();
+                FunctionData.Kind kind = methodFunction.kind();
+                if (kind == FunctionData.Kind.REMOTE) {
+                    nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.REMOTE_ACTION_CALL);
+                } else if (kind == FunctionData.Kind.FUNCTION) {
+                    nodeBuilder = NodeBuilder.getNodeFromKind(NodeKind.METHOD_CALL);
+                } else {
+                    throw new IllegalStateException("Unexpected value: " + kind);
+                }
+            }
+
+            Item node = nodeBuilder
+                    .metadata()
+                    .label(label)
+                    .icon(CommonUtils.generateIcon(org, packageName, version))
+                    .description(methodFunction.description())
+                    .stepOut()
+                    .codedata()
+                    .org(org)
+                    .module(moduleInfo.moduleName())
+                    .packageName(moduleInfo.packageName())
+                    .object(className)
+                    .symbol(methodFunction.name())
+                    .version(version)
+                    .parentSymbol(parentSymbolName)
+                    .resourcePath(methodFunction.resourcePath())
+                    .stepOut()
+                    .buildAvailableNode();
+            methods.add(node);
+        }
+
+        Metadata metadata = new Metadata.Builder<>(null)
+                .label(parentSymbolName)
+                .build();
+        return Optional.of(new Category(metadata, methods));
+    }
+
+    private boolean isAiTypeInclusion(ClassSymbol classSymbol, String targetTypeName) {
+        return classSymbol.typeInclusions().stream()
+                .filter(typeSymbol -> typeSymbol instanceof TypeReferenceTypeSymbol)
+                .map(typeSymbol -> (TypeReferenceTypeSymbol) typeSymbol)
+                .filter(typeRef -> typeRef.definition().nameEquals(targetTypeName))
+                .map(TypeSymbol::getModule)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .anyMatch(moduleId ->
+                        BALLERINA_ORG.equals(moduleId.id().orgName()) &&
+                                AI_MODULE_NAME.equals(moduleId.id().moduleName()));
+    }
+
+    private boolean isAiModelProvider(ClassSymbol classSymbol) {
+        return isAiTypeInclusion(classSymbol, "ModelProvider");
+    }
+
+    private boolean isAiEmbeddingProvider(ClassSymbol classSymbol) {
+        return isAiTypeInclusion(classSymbol, "EmbeddingProvider");
+    }
+
+    private boolean isAiKnowledgeBase(ClassSymbol classSymbol) {
+        return isAiTypeInclusion(classSymbol, "KnowledgeBase");
+    }
+
+    private boolean isAiVectorStore(ClassSymbol classSymbol) {
+        return isAiTypeInclusion(classSymbol, "VectorStore");
     }
 }

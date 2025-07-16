@@ -333,7 +333,7 @@ public class FunctionDataBuilder {
                 functionSymbol(fetchedSymbol);
             } else {
                 // Fetch the init method if it is a connection
-                if (functionKind == FunctionData.Kind.CONNECTOR) {
+                if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
                     if (parentSymbol.kind() != SymbolKind.CLASS ||
                             !parentSymbol.qualifiers().contains(Qualifier.CLIENT)) {
                         throw new IllegalStateException("The connector should be a client class");
@@ -997,7 +997,7 @@ public class FunctionDataBuilder {
 
     private String getFunctionName() {
         // Get the client name if it is the init method of the client
-        if (functionKind == FunctionData.Kind.CONNECTOR) {
+        if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER) {
             if (parentSymbolType != null) {
                 return parentSymbolType;
             }

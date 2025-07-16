@@ -43,13 +43,13 @@ import java.util.Set;
  * @param defaultValue        default value of the property
  * @param optional            whether the property can be left empty
  * @param editable            whether the property is not readonly
- * @param advanced            whether the property should be shown in the advanced tab
+ * @param advanced            whether the property should be shown in the more tab
  * @param hidden              whether the property should be hidden
  * @param modified            Whether the property is modified in the UI.
  * @param diagnostics         diagnostics of the property
  * @param codedata            codedata of the property
  * @param typeMembers         member types of the type constrain
- * @param advancedValue       advanced value of the property
+ * @param advancedValue       more value of the property
  * @param imports             import statements of the dependent types in the format prefix -> moduleId
  * @since 1.0.0
  */
