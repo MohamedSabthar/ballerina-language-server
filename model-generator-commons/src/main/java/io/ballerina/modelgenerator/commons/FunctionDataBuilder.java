@@ -443,7 +443,8 @@ public class FunctionDataBuilder {
     }
 
     private boolean isVectorStoreOrKnowledgeBaseKind(FunctionData.Kind functionKind) {
-        return functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE;
+        return functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE
+                || functionKind == FunctionData.Kind.VECTOR_STORE;
     }
 
     private void checkLocalModule() {
@@ -517,7 +518,8 @@ public class FunctionDataBuilder {
     }
 
     private boolean isGetDefaultModelProvider(FunctionData.Kind functionKind, String functionName) {
-        return functionKind == FunctionData.Kind.MODEL_PROVIDER && functionName.equals(GET_DEFAULT_MODEL_PROVIDER_FUNCTION_NAME);
+        return functionKind == FunctionData.Kind.MODEL_PROVIDER
+                && functionName.equals(GET_DEFAULT_MODEL_PROVIDER_FUNCTION_NAME);
     }
 
     private boolean isGetDefaultEmbeddingProvider(FunctionData.Kind functionKind, String functionName) {
