@@ -24,7 +24,7 @@ public class EmbeddingProviderBuilder extends CallBuilder {
     @Override
     public void setConcreteConstData() {
         metadata().label(LABEL);
-        codedata().node(NodeKind.EMBEDDING_PROVIDER).symbol("init");
+        codedata().node(NodeKind.EMBEDDING_PROVIDER);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class EmbeddingProviderBuilder extends CallBuilder {
 
     @Override
     protected FunctionData.Kind getFunctionResultKind() {
-        return FunctionData.Kind.CLASS_INIT;
+        return FunctionData.Kind.EMBEDDING_PROVIDER;
     }
 
     @Override

@@ -24,7 +24,7 @@ public class VectorKnowledgeBaseBuilder extends CallBuilder{
     @Override
     public void setConcreteConstData() {
         metadata().label(LABEL);
-        codedata().node(NodeKind.VECTOR_KNOWLEDGE_BASE).symbol("init");
+        codedata().node(NodeKind.VECTOR_KNOWLEDGE_BASE);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class VectorKnowledgeBaseBuilder extends CallBuilder{
 
     @Override
     protected FunctionData.Kind getFunctionResultKind() {
-        return FunctionData.Kind.CLASS_INIT;
+        return FunctionData.Kind.VECTOR_KNOWLEDGE_BASE;
     }
 
     @Override

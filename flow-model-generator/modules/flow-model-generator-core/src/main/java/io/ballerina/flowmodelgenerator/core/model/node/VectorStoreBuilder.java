@@ -24,7 +24,7 @@ public class VectorStoreBuilder extends CallBuilder {
     @Override
     public void setConcreteConstData() {
         metadata().label(LABEL);
-        codedata().node(NodeKind.VECTOR_STORE).symbol("init");
+        codedata().node(NodeKind.VECTOR_STORE);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class VectorStoreBuilder extends CallBuilder {
 
     @Override
     protected FunctionData.Kind getFunctionResultKind() {
-        return FunctionData.Kind.CLASS_INIT;
+        return FunctionData.Kind.VECTOR_STORE;
     }
 
     @Override
