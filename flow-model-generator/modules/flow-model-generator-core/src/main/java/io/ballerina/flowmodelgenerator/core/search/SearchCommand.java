@@ -65,7 +65,7 @@ public abstract class SearchCommand {
             case CONNECTOR -> new ConnectorSearchCommand(module, position, queryMap);
             case NP_FUNCTION -> new NPFunctionSearchCommand(module, position, queryMap, functionsDoc);
             case TYPE -> new TypeSearchCommand(module, position, queryMap);
-            case MODEL_PROVIDER -> new ConnectorSearchCommand(module, position, queryMap);
+            case MODEL_PROVIDER -> new ModelProviderSearchCommand(module, position, queryMap);
         };
     }
 

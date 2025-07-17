@@ -64,12 +64,7 @@ public class ModelProviderBuilder extends CallBuilder {
 
     @Override
     public void setConcreteTemplateData(TemplateContext context) {
-//        Codedata codedata = context.codedata();
-        // TODO: remove
-        Codedata codedata = new Codedata.Builder<>(null)
-                .org("ballerinax")
-                .packageName("ai.openai").module("ai.openai").symbol("init").object("ModelProvider")
-                .build();
+        Codedata codedata = context.codedata();
         FunctionData functionData;
 
         FunctionDataBuilder functionDataBuilder = new FunctionDataBuilder()

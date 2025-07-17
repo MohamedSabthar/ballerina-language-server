@@ -51,6 +51,7 @@ import java.util.Map;
  */
 public class LocalIndexCentral {
 
+    private static final String MODEL_PROVIDERS = "model_providers.json";
     private final Gson gson;
     private Map<String, FlowNode> templateCache;
     private Map<String, List<Item>> connectionMap;
@@ -89,6 +90,11 @@ public class LocalIndexCentral {
 
     public List<Item> getFunctions() {
         Category functions = readJsonResource(FUNCTIONS_JSON, Category.class);
+        return functions.items();
+    }
+
+    public List<Item> getModelProviders() {
+        Category functions = readJsonResource(MODEL_PROVIDERS, Category.class);
         return functions.items();
     }
 
