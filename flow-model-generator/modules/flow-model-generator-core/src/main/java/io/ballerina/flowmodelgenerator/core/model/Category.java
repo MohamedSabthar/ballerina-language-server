@@ -65,6 +65,8 @@ public record Category(Metadata metadata, List<Item> items) implements Item {
                 List.of("Available", "Type", "Library")),
         VECTOR_KNOWLEDGE_BASE("Vector Knowledge Base", "vector knowledge-bases available in the flow", null),
         MODEL_PROVIDER("Model Provider", "The model-provider used in the flow to connect to an LLM", null),
+        EMBEDDING_PROVIDER("Embedding Provider", "The embedding-provider used in the flow to connect to an embedding model provider", null),
+        VECTOR_STORE("Vector Store", "Vector stores used int the integration", null),
         AI("AI", "AI components available in the flow", null);
 
         final String name;

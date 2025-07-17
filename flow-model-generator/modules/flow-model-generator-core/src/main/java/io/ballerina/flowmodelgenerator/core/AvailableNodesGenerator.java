@@ -135,6 +135,54 @@ public class AvailableNodesGenerator {
         return gson.toJsonTree(items).getAsJsonArray();
     }
 
+    public JsonArray getAvailableEmbeddingProviders(LinePosition position) {
+        List<Category> modelProviders = new ArrayList<>();
+        List<Symbol> symbols = semanticModel.visibleSymbols(document, position);
+        for (Symbol symbol : symbols) {
+            Optional<Category> modelProvider = getEmbeddingProvider(symbol);
+            if (modelProvider.isEmpty()) {
+                continue;
+            }
+            modelProviders.add(modelProvider.get());
+        }
+        modelProviders.sort(Comparator.comparing(connection -> connection.metadata().label()));
+        List<Item> items = this.rootBuilder.stepIn(Category.Name.EMBEDDING_PROVIDER).items(new ArrayList<>(modelProviders))
+                .stepOut().build().items();
+        return gson.toJsonTree(items).getAsJsonArray();
+    }
+
+    public JsonArray getAvailableVectorStores(LinePosition position) {
+        List<Category> modelProviders = new ArrayList<>();
+        List<Symbol> symbols = semanticModel.visibleSymbols(document, position);
+        for (Symbol symbol : symbols) {
+            Optional<Category> modelProvider = getVectorStore(symbol);
+            if (modelProvider.isEmpty()) {
+                continue;
+            }
+            modelProviders.add(modelProvider.get());
+        }
+        modelProviders.sort(Comparator.comparing(connection -> connection.metadata().label()));
+        List<Item> items = this.rootBuilder.stepIn(Category.Name.VECTOR_STORE).items(new ArrayList<>(modelProviders))
+                .stepOut().build().items();
+        return gson.toJsonTree(items).getAsJsonArray();
+    }
+
+    public JsonArray getAvailableVectorKnowledgeBases(LinePosition position) {
+        List<Category> modelProviders = new ArrayList<>();
+        List<Symbol> symbols = semanticModel.visibleSymbols(document, position);
+        for (Symbol symbol : symbols) {
+            Optional<Category> modelProvider = getKnowledgeBase(symbol);
+            if (modelProvider.isEmpty()) {
+                continue;
+            }
+            modelProviders.add(modelProvider.get());
+        }
+        modelProviders.sort(Comparator.comparing(connection -> connection.metadata().label()));
+        List<Item> items = this.rootBuilder.stepIn(Category.Name.VECTOR_KNOWLEDGE_BASE).items(new ArrayList<>(modelProviders))
+                .stepOut().build().items();
+        return gson.toJsonTree(items).getAsJsonArray();
+    }
+
     private List<Item> getAiNodes() {
         AvailableNode vectorKnowledgeBase = new AvailableNode(
                 new Metadata.Builder<>(null)
