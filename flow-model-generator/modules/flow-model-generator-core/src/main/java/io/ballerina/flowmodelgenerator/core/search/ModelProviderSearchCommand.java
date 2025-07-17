@@ -19,7 +19,9 @@
 package io.ballerina.flowmodelgenerator.core.search;
 
 import io.ballerina.flowmodelgenerator.core.LocalIndexCentral;
-import io.ballerina.flowmodelgenerator.core.model.*;
+import io.ballerina.flowmodelgenerator.core.model.AvailableNode;
+import io.ballerina.flowmodelgenerator.core.model.Category;
+import io.ballerina.flowmodelgenerator.core.model.Item;
 import io.ballerina.modelgenerator.commons.SearchResult;
 import io.ballerina.projects.Project;
 import io.ballerina.tools.text.LineRange;

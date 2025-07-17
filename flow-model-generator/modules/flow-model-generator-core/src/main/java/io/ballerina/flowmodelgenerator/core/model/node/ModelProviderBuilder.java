@@ -19,7 +19,10 @@
 package io.ballerina.flowmodelgenerator.core.model.node;
 
 import io.ballerina.compiler.syntax.tree.SyntaxKind;
-import io.ballerina.flowmodelgenerator.core.model.*;
+import io.ballerina.flowmodelgenerator.core.model.Codedata;
+import io.ballerina.flowmodelgenerator.core.model.NodeKind;
+import io.ballerina.flowmodelgenerator.core.model.Property;
+import io.ballerina.flowmodelgenerator.core.model.SourceBuilder;
 import io.ballerina.modelgenerator.commons.CommonUtils;
 import io.ballerina.modelgenerator.commons.FunctionData;
 import io.ballerina.modelgenerator.commons.FunctionDataBuilder;
@@ -35,7 +38,8 @@ import static io.ballerina.modelgenerator.commons.FunctionDataBuilder.GET_DEFAUL
 
 public class ModelProviderBuilder extends CallBuilder {
     public static final String LABEL = "Model Provider";
-    public static final String DESCRIPTION = "Model providers available within the integration for connecting to an LLM";
+    public static final String DESCRIPTION = "Model providers available within the integration " +
+            "for connecting to an LLM";
 
     private static final String MODEL_PROVIDER_NAME_LABEL = "Model Provider Name";
     private static final String MODEL_PROVIDER_NAME_LABEL_DOC = "Name of the model-provider connection";
