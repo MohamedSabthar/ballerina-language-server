@@ -24,7 +24,8 @@ public class VectorKnowledgeBaseBuilder extends CallBuilder{
     @Override
     public void setConcreteConstData() {
         metadata().label(LABEL);
-        codedata().node(NodeKind.VECTOR_KNOWLEDGE_BASE);
+        codedata().node(NodeKind.VECTOR_KNOWLEDGE_BASE).symbol("init").object("VectorKnowledgeBase")
+                .module("ai").packageName("ai").version("1.0.0").org("ballerina");
     }
 
     @Override

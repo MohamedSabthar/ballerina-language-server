@@ -88,26 +88,6 @@ public class ModelProviderBuilder extends CallBuilder {
     @Override
     public void setConcreteTemplateData(TemplateContext context) {
         Codedata codedata = context.codedata();
-//        if (codedata.symbol().equals("getDefaultModelProvider")) {
-//            metadata()
-//                    .label(codedata.packageName())
-//                    .description("");
-//            codedata()
-//                    .node(NodeKind.MODEL_PROVIDER)
-//                    .org(codedata.org())
-//                    .module(codedata.module())
-//                    .packageName(codedata.packageName())
-//                    .version(codedata.packageName())
-//                    .version(codedata.version())
-//                    .symbol("getDefaultModelProvider");
-//
-//            setReturnTypeProperties(functionData, context, MODEL_PROVIDER_NAME, MODEL_PROVIDER_NAME_DOC, false);
-//            properties()
-//                    .scope(Property.GLOBAL_SCOPE)
-//                    .checkError(true, CHECK_ERROR_DOC, false);
-//            return;
-//        }
-        // TODO: getDefaultModelProvider
 
         FunctionData functionData;
 

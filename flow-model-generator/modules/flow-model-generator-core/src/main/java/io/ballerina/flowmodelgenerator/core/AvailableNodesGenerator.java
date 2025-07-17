@@ -144,6 +144,8 @@ public class AvailableNodesGenerator {
                         .build(),
                 new Codedata.Builder<>(null)
                         .node(NodeKind.VECTOR_KNOWLEDGE_BASE)
+                        .org("ballerina")
+                        .module(AI_MODULE_NAME).packageName(AI_MODULE_NAME).version("1.0.0").object("VectorKnowledgeBase").symbol("init")
                         .build(),
                 true
         );
