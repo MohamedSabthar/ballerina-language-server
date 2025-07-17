@@ -52,7 +52,7 @@ public class ModelProviderSearchCommand extends SearchCommand {
         if (modelProviders.isEmpty()) {
             return modelProviders;
         }
-        Category modelProviderCategory = (Category) modelProviders.get(0);
+        Category modelProviderCategory = (Category) modelProviders.getFirst();
         List<Item> availableProvider = modelProviderCategory.items();
         List<Item> filteredProviders = availableProvider.stream().filter(p -> p instanceof AvailableNode availableNode && availableNode.codedata().module().contains(query)).toList();
         modelProviderCategory.items().removeAll(filteredProviders);

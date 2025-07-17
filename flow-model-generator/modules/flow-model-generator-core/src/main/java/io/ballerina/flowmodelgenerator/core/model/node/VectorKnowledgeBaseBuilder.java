@@ -44,7 +44,6 @@ public class VectorKnowledgeBaseBuilder extends CallBuilder{
                 .newVariable();
 
         sourceBuilder.token()
-                .keyword(SyntaxKind.CHECK_KEYWORD)
                 .keyword(SyntaxKind.NEW_KEYWORD)
                 .stepOut()
                 .functionParameters(sourceBuilder.flowNode,
@@ -60,12 +59,7 @@ public class VectorKnowledgeBaseBuilder extends CallBuilder{
 
     @Override
     public void setConcreteTemplateData(NodeBuilder.TemplateContext context) {
-//        Codedata codedata = context.codedata();
-        // TODO: remove
-        Codedata codedata = new Codedata.Builder<>(null)
-                .org("ballerina")
-                .packageName("ai").module("ai").symbol("init").object("VectorKnowledgeBase")
-                .build();
+        Codedata codedata = context.codedata();
         FunctionData functionData;
 
         FunctionDataBuilder functionDataBuilder = new FunctionDataBuilder()

@@ -461,6 +461,9 @@ public class FunctionDataBuilder {
         Optional<TypeSymbol> returnTypeSymbol = functionTypeSymbol.returnTypeDescriptor();
         String returnType = returnTypeSymbol
                 .map(typeSymbol -> {
+                    if (functionKind == FunctionData.Kind.MODEL_PROVIDER && functionName.equals("getDefaultModelProvider")) {
+                        return CommonUtils.getClassType(moduleInfo.moduleName(), "Wso2ModelProvider");
+                    }
                     if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT
                             || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER || functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE) {
                         return CommonUtils.getClassType(moduleInfo.moduleName(),
