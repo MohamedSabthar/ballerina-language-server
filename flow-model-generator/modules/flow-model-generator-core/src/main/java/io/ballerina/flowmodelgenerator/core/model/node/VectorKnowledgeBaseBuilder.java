@@ -13,23 +13,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class VectorStoreBuilder extends CallBuilder {
-    public static final String LABEL = "Vector Store";
-    public static final String DESCRIPTION = "vector-store available in the flow";
+public class VectorKnowledgeBaseBuilder extends CallBuilder{
+    public static final String LABEL = "Vector Knowledge Base";
+    public static final String DESCRIPTION = "vector knowledge-bases available in the flow";
 
-    public static final String VECTOR_STORE_NAME = "Vector knowledge-base name";
-    public static final String VECTOR_STORE_NAME_DOC = VECTOR_STORE_NAME;
+    public static final String VECTOR_KNOWLEDGE_BASE_NAME = "Vector knowledge-base name";
+    public static final String VECTOR_KNOWLEDGE_BASE_PROVIDER_NAME_DOC = VECTOR_KNOWLEDGE_BASE_NAME;
     public static final String CHECK_ERROR_DOC = "Terminate on error";
 
     @Override
     public void setConcreteConstData() {
         metadata().label(LABEL);
-        codedata().node(NodeKind.VECTOR_STORE).symbol("init");
+        codedata().node(NodeKind.VECTOR_KNOWLEDGE_BASE).symbol("init");
     }
 
     @Override
     protected NodeKind getFunctionNodeKind() {
-        return NodeKind.VECTOR_STORE;
+        return NodeKind.VECTOR_KNOWLEDGE_BASE;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class VectorStoreBuilder extends CallBuilder {
 //        Codedata codedata = context.codedata();
         // TODO: remove
         Codedata codedata = new Codedata.Builder<>(null)
-                .org("ballerinax")
-                .packageName("ai.pinecone").module("ai.pinecone").symbol("init").object("VectorStore")
+                .org("ballerina")
+                .packageName("ai").module("ai").symbol("init").object("VectorKnowledgeBase")
                 .build();
         FunctionData functionData;
 
@@ -74,7 +74,7 @@ public class VectorStoreBuilder extends CallBuilder {
                 .moduleInfo(new ModuleInfo(codedata.org(), codedata.packageName(), codedata.module(),
                         codedata.version()))
                 .lsClientLogger(context.lsClientLogger())
-                .functionResultKind(FunctionData.Kind.VECTOR_STORE)
+                .functionResultKind(FunctionData.Kind.VECTOR_KNOWLEDGE_BASE)
 
                 .userModuleInfo(moduleInfo);
 
@@ -85,7 +85,7 @@ public class VectorStoreBuilder extends CallBuilder {
                 .icon(CommonUtils.generateIcon(functionData.org(), functionData.packageName(),
                         functionData.version()));
         codedata()
-                .node(NodeKind.VECTOR_STORE)
+                .node(NodeKind.VECTOR_KNOWLEDGE_BASE)
                 .org(functionData.org())
                 .module(functionData.moduleName())
                 .packageName(functionData.packageName())
@@ -96,7 +96,7 @@ public class VectorStoreBuilder extends CallBuilder {
         setParameterProperties(functionData);
 
         if (CommonUtils.hasReturn(functionData.returnType())) {
-            setReturnTypeProperties(functionData, context, VECTOR_STORE_NAME, VECTOR_STORE_NAME_DOC, false);
+            setReturnTypeProperties(functionData, context, VECTOR_KNOWLEDGE_BASE_NAME, VECTOR_KNOWLEDGE_BASE_PROVIDER_NAME_DOC, false);
         }
 
         properties()

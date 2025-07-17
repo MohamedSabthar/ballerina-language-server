@@ -138,8 +138,8 @@ public class AvailableNodesGenerator {
     private List<Item> getAiNodes() {
         AvailableNode vectorKnowledgeBase = new AvailableNode(
                 new Metadata.Builder<>(null)
-                        .label(KnowledgeBaseBuilder.LABEL)
-                        .description(KnowledgeBaseBuilder.DESCRIPTION)
+                        .label(VectorKnowledgeBaseBuilder.LABEL)
+                        .description(VectorKnowledgeBaseBuilder.DESCRIPTION)
 //                        .icon(Constants.NaturalFunctions.ICON)
                         .build(),
                 new Codedata.Builder<>(null)
@@ -229,7 +229,22 @@ public class AvailableNodesGenerator {
                 true
         );
 
-        return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, agentCall, vectorStore, embeddingProvider);
+        AvailableNode augmentUserQuery = new AvailableNode(
+                new Metadata.Builder<>(null)
+                        .label("Augment Query")
+//                        .icon("") // add an icon
+                        .build(),
+                new Codedata.Builder<>(null)
+                        .node(NodeKind.FUNCTION_CALL).org(BALLERINA_ORG)
+                        .module(AI_MODULE_NAME)
+                        .packageName(AI_MODULE_NAME)
+                        .symbol("augmentUserQuery")
+                        .build()
+                ,
+                true
+        );
+
+        return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, agentCall, vectorStore, embeddingProvider, augmentUserQuery);
     }
 
     private List<Item> getAvailableFlowNodes(LinePosition cursorPosition) {

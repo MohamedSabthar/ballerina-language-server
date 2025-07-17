@@ -332,10 +332,19 @@ public class FunctionDataBuilder {
                         .orElseThrow(() -> new IllegalStateException("Function symbol not found"));
                 functionSymbol(fetchedSymbol);
             } else {
+                // special case handle vector knowledge base
+                if ((functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE) && parentSymbol.kind() == SymbolKind.CLASS ) {
+                    ClassSymbol classSymbol = (ClassSymbol) parentSymbol;
+                    Optional<MethodSymbol> initMethod = classSymbol.initMethod();
+                    if (initMethod.isEmpty()) {
+                        throw new IllegalStateException("The vector store init shouldn't be empty");
+                    }
+                    functionSymbol = initMethod.get();
+                } else
                 // Fetch the init method if it is a connection
                 if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
-                    if (parentSymbol.kind() != SymbolKind.CLASS ||
-                            !parentSymbol.qualifiers().contains(Qualifier.CLIENT)) {
+                    if ((parentSymbol.kind() != SymbolKind.CLASS ||
+                            !parentSymbol.qualifiers().contains(Qualifier.CLIENT))) {
                         throw new IllegalStateException("The connector should be a client class");
                     }
                     ClassSymbol classSymbol = (ClassSymbol) parentSymbol;
@@ -453,7 +462,7 @@ public class FunctionDataBuilder {
         String returnType = returnTypeSymbol
                 .map(typeSymbol -> {
                     if (functionKind == FunctionData.Kind.CONNECTOR || functionKind == FunctionData.Kind.CLASS_INIT
-                            || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
+                            || functionKind == FunctionData.Kind.MODEL_PROVIDER || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER || functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE) {
                         return CommonUtils.getClassType(moduleInfo.moduleName(),
                                 parentSymbol.getName().orElse("Client"));
                     }
@@ -1000,7 +1009,7 @@ public class FunctionDataBuilder {
         // Get the client name if it is the init method of the client
         if (functionKind == FunctionData.Kind.CONNECTOR
                 || functionKind == FunctionData.Kind.MODEL_PROVIDER
-                || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER) {
+                || functionKind == FunctionData.Kind.EMBEDDING_PROVIDER || functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE) {
             if (parentSymbolType != null) {
                 return parentSymbolType;
             }

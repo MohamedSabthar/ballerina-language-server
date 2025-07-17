@@ -179,7 +179,7 @@ public class ExpressionEditorContext {
         }
 
         // Add the import statement for the node type
-        if (isNodeKind(List.of(NodeKind.NEW_CONNECTION, NodeKind.MODEL_PROVIDER, NodeKind.EMBEDDING_PROVIDER, NodeKind.FUNCTION_CALL, NodeKind.REMOTE_ACTION_CALL,
+        if (isNodeKind(List.of(NodeKind.NEW_CONNECTION, NodeKind.MODEL_PROVIDER, NodeKind.EMBEDDING_PROVIDER, NodeKind.VECTOR_STORE, NodeKind.VECTOR_KNOWLEDGE_BASE,NodeKind.FUNCTION_CALL, NodeKind.REMOTE_ACTION_CALL,
                 NodeKind.RESOURCE_ACTION_CALL))) {
             Optional<TextEdit> textEdit = getImport();
             if (textEdit.isPresent()) {

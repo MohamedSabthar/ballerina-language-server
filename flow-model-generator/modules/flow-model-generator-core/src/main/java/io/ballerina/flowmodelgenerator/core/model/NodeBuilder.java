@@ -108,6 +108,8 @@ public abstract class NodeBuilder implements DiagnosticHandler.DiagnosticCapable
         put(NodeKind.CLASS_INIT, ClassInitBuilder::new);
         put(NodeKind.MODEL_PROVIDER, ModelProviderBuilder::new);
         put(NodeKind.EMBEDDING_PROVIDER, EmbeddingProviderBuilder::new);
+        put(NodeKind.VECTOR_KNOWLEDGE_BASE, VectorKnowledgeBaseBuilder::new);
+        put(NodeKind.VECTOR_STORE, VectorStoreBuilder::new);
 
     }};
 
