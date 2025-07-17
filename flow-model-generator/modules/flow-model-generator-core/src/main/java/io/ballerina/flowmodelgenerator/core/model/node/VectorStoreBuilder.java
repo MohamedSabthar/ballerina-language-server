@@ -60,12 +60,7 @@ public class VectorStoreBuilder extends CallBuilder {
 
     @Override
     public void setConcreteTemplateData(NodeBuilder.TemplateContext context) {
-//        Codedata codedata = context.codedata();
-        // TODO: remove
-        Codedata codedata = new Codedata.Builder<>(null)
-                .org("ballerinax")
-                .packageName("ai.pinecone").module("ai.pinecone").symbol("init").object("VectorStore")
-                .build();
+        Codedata codedata = context.codedata();
         FunctionData functionData;
 
         FunctionDataBuilder functionDataBuilder = new FunctionDataBuilder()

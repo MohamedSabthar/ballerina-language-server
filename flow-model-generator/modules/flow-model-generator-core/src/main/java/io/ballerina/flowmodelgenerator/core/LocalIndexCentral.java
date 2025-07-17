@@ -52,6 +52,8 @@ import java.util.Map;
 public class LocalIndexCentral {
 
     private static final String MODEL_PROVIDERS = "model_providers.json";
+    private static final String VECTOR_STORES = "vector_stores.json";
+    private static final String EMBEDDING_PROVIDERS = "embedding_providers.json";
     private final Gson gson;
     private Map<String, FlowNode> templateCache;
     private Map<String, List<Item>> connectionMap;
@@ -95,6 +97,16 @@ public class LocalIndexCentral {
 
     public List<Item> getModelProviders() {
         Category functions = readJsonResource(MODEL_PROVIDERS, Category.class);
+        return functions.items();
+    }
+
+    public List<Item> getEmbeddingProviders() {
+        Category functions = readJsonResource(EMBEDDING_PROVIDERS, Category.class);
+        return functions.items();
+    }
+
+    public List<Item> getVectorStores() {
+        Category functions = readJsonResource(VECTOR_STORES, Category.class);
         return functions.items();
     }
 

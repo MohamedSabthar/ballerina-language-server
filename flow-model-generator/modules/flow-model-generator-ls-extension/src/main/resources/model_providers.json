@@ -7,6 +7,23 @@
             "items": [
                 {
                     "metadata": {
+                        "label": "Default Model Provider (WSO2)",
+                        "description": "Provides an interface for interacting with WSO2 hosted Large Language Model"
+                    },
+                    "codedata": {
+                        "node": "MODEL_PROVIDER",
+                        "module": "ai",
+                        "packageName": "ai",
+                        "symbol": "getDefaultModelProvider",
+                        "org": "ballerina",
+                        "importStmt": "import ballerina/ai",
+                        "version": "1.0.0",
+                        "flags": 1
+                    },
+                    "enabled": true
+                },
+                {
+                    "metadata": {
                         "label": "OpenAI Model Provider",
                         "description": "Provides an interface for interacting with OpenAI Large Language Models"
                     },

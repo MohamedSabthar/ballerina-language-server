@@ -62,10 +62,12 @@ public abstract class SearchCommand {
                                      Document functionsDoc) {
         return switch (kind) {
             case FUNCTION -> new FunctionSearchCommand(module, position, queryMap, functionsDoc);
-            case CONNECTOR -> new ConnectorSearchCommand(module, position, queryMap);
+            case CONNECTOR -> new EmbeddingProviderSearchCommand(module, position, queryMap);
             case NP_FUNCTION -> new NPFunctionSearchCommand(module, position, queryMap, functionsDoc);
             case TYPE -> new TypeSearchCommand(module, position, queryMap);
             case MODEL_PROVIDER -> new ModelProviderSearchCommand(module, position, queryMap);
+            case VECTOR_STORE -> new VectorStoreSearchCommand(module, position, queryMap);
+            case EMBEDDING_PROVIDER -> new EmbeddingProviderSearchCommand(module, position, queryMap);
         };
     }
 
@@ -142,6 +144,8 @@ public abstract class SearchCommand {
         CONNECTOR,
         TYPE,
         NP_FUNCTION,
-        MODEL_PROVIDER
+        MODEL_PROVIDER,
+        VECTOR_STORE,
+        EMBEDDING_PROVIDER
     }
 }
