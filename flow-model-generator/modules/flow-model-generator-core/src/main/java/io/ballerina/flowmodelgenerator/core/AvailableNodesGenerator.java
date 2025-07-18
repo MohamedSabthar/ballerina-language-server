@@ -284,8 +284,8 @@ public class AvailableNodesGenerator {
                 new Codedata.Builder<>(null).node(NodeKind.EMBEDDING_PROVIDER).build(),
                 true, true);
 
-        return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, augmentUserQuery, agentCall,
-                vectorStore, embeddingProvider);
+        return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, augmentUserQuery,
+                vectorStore, embeddingProvider, agentCall);
     }
 
     private void setStopNode(NonTerminalNode node) {
