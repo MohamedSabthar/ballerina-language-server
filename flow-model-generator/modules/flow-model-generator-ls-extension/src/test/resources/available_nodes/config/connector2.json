@@ -4811,22 +4811,6 @@
         },
         {
           "metadata": {
-            "label": "Agent",
-            "description": "Create new agent"
-          },
-          "codedata": {
-            "node": "AGENT_CALL",
-            "org": "ballerinax",
-            "module": "ai",
-            "packageName": "ai",
-            "object": "Agent",
-            "symbol": "run"
-          },
-          "enabled": true,
-          "more": false
-        },
-        {
-          "metadata": {
             "label": "Vector Store",
             "description": "Vector stores available in the integration"
           },
@@ -4846,6 +4830,22 @@
           },
           "enabled": true,
           "more": true
+        },
+        {
+          "metadata": {
+            "label": "Agent",
+            "description": "Create new agent"
+          },
+          "codedata": {
+            "node": "AGENT_CALL",
+            "org": "ballerinax",
+            "module": "ai",
+            "packageName": "ai",
+            "object": "Agent",
+            "symbol": "run"
+          },
+          "enabled": true,
+          "more": false
         }
       ]
     },
