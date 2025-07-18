@@ -237,7 +237,7 @@ public class AvailableNodesGenerator {
         // TODO: sec icons in metadata
         AvailableNode modelProvider = new AvailableNode(new Metadata.Builder<>(null)
                 .label(ModelProviderBuilder.LABEL).description(ModelProviderBuilder.DESCRIPTION).build(),
-                new Codedata.Builder<>(null).node(NodeKind.MODEL_PROVIDER).build(), true);
+                new Codedata.Builder<>(null).node(NodeKind.MODEL_PROVIDERS).build(), true);
 
         AvailableNode npFunction = new AvailableNode(
                 new Metadata.Builder<>(null).label(NPFunctionCall.LABEL)
@@ -247,7 +247,7 @@ public class AvailableNodesGenerator {
         AvailableNode vectorKnowledgeBase = new AvailableNode(
                 new Metadata.Builder<>(null).label(VectorKnowledgeBaseBuilder.LABEL)
                         .description(VectorKnowledgeBaseBuilder.DESCRIPTION).build(),
-                new Codedata.Builder<>(null).node(NodeKind.VECTOR_KNOWLEDGE_BASE).org(Ai.BALLERINA_ORG)
+                new Codedata.Builder<>(null).node(NodeKind.VECTOR_KNOWLEDGE_BASES).org(Ai.BALLERINA_ORG)
                         .module(Ai.AI_PACKAGE).packageName(Ai.AI_PACKAGE).version(Ai.VERSION)
                         .object(Ai.VECTOR_KNOWLEDGE_BASE_TYPE_NAME).symbol("init").build(),
                 true);
@@ -275,13 +275,13 @@ public class AvailableNodesGenerator {
         AvailableNode vectorStore = new AvailableNode(
                 new Metadata.Builder<>(null).label(VectorStoreBuilder.LABEL)
                         .description(VectorStoreBuilder.DESCRIPTION).build(),
-                new Codedata.Builder<>(null).node(NodeKind.VECTOR_STORE).build(),
+                new Codedata.Builder<>(null).node(NodeKind.VECTOR_STORES).build(),
                 true, true);
 
         AvailableNode embeddingProvider = new AvailableNode(
                 new Metadata.Builder<>(null).label(EmbeddingProviderBuilder.LABEL)
                         .description(EmbeddingProviderBuilder.DESCRIPTION).build(),
-                new Codedata.Builder<>(null).node(NodeKind.EMBEDDING_PROVIDER).build(),
+                new Codedata.Builder<>(null).node(NodeKind.EMBEDDING_PROVIDERS).build(),
                 true, true);
 
         return List.of(modelProvider, npFunction, vectorKnowledgeBase, chunkers, augmentUserQuery,

@@ -4747,7 +4747,7 @@
             "description": "Model providers available within the integration for connecting to an LLM"
           },
           "codedata": {
-            "node": "MODEL_PROVIDER"
+            "node": "MODEL_PROVIDERS"
           },
           "enabled": true,
           "more": false
@@ -4770,7 +4770,7 @@
             "description": "Vector knowledge bases available in the integration"
           },
           "codedata": {
-            "node": "VECTOR_KNOWLEDGE_BASE",
+            "node": "VECTOR_KNOWLEDGE_BASES",
             "org": "ballerina",
             "module": "ai",
             "packageName": "ai",
@@ -4815,7 +4815,7 @@
             "description": "Vector stores available in the integration"
           },
           "codedata": {
-            "node": "VECTOR_STORE"
+            "node": "VECTOR_STORES"
           },
           "enabled": true,
           "more": true
@@ -4826,7 +4826,7 @@
             "description": "Embedding providers available within the integration for connecting to an embedding model"
           },
           "codedata": {
-            "node": "EMBEDDING_PROVIDER"
+            "node": "EMBEDDING_PROVIDERS"
           },
           "enabled": true,
           "more": true
