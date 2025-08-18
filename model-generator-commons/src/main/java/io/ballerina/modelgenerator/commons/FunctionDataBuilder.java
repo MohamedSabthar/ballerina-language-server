@@ -341,7 +341,7 @@ public class FunctionDataBuilder {
                         .orElseThrow(() -> new IllegalStateException("Function symbol not found"));
                 functionSymbol(fetchedSymbol);
             } else {
-                if (isVectorStoreOrKnowledgeBaseKind(functionKind)) {
+                if (isAiClassNodes(functionKind)) {
                     ClassSymbol classSymbol = (ClassSymbol) parentSymbol;
                     Optional<MethodSymbol> initMethod = classSymbol.initMethod();
                     if (initMethod.isEmpty()) {
@@ -447,9 +447,9 @@ public class FunctionDataBuilder {
                 functionKind == FunctionData.Kind.EMBEDDING_PROVIDER;
     }
 
-    private boolean isVectorStoreOrKnowledgeBaseKind(FunctionData.Kind functionKind) {
+    private boolean isAiClassNodes(FunctionData.Kind functionKind) {
         return functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE
-                || functionKind == FunctionData.Kind.VECTOR_STORE;
+                || functionKind == FunctionData.Kind.VECTOR_STORE || functionKind == FunctionData.Kind.DATA_LOADER;
     }
 
     private void checkLocalModule() {
@@ -486,7 +486,7 @@ public class FunctionDataBuilder {
                     }
                     if (functionKind == FunctionData.Kind.CLASS_INIT
                             || isConnectorOrProviderKind(functionKind)
-                            || isVectorStoreOrKnowledgeBaseKind(functionKind)) {
+                            || isAiClassNodes(functionKind)) {
                         return CommonUtils.getClassType(moduleInfo.moduleName(),
                                 parentSymbol.getName().orElse("Client"));
                     }
@@ -1041,7 +1041,7 @@ public class FunctionDataBuilder {
 
     private String getFunctionName() {
         // Get the client name if it is the init method of the client
-        if (isConnectorOrProviderKind(functionKind) || isVectorStoreOrKnowledgeBaseKind(functionKind)) {
+        if (isConnectorOrProviderKind(functionKind) || isAiClassNodes(functionKind)) {
             if (parentSymbolType != null) {
                 return parentSymbolType;
             }
