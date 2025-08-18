@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "metadata": {
+                "label": "Data Loaders"
+            },
+            "items": [
+                {
+                    "metadata": {
+                        "label": "Devant Data Loader",
+                        "description": "Load data from a source compatible with devant:Chunker."
+                    },
+                    "codedata": {
+                        "node": "DATA_LOADER",
+                        "module": "ai.devant",
+                        "packageName": "ai.devant",
+                        "symbol": "init",
+                        "org": "ballerinax",
+                        "importStmt": "import ballerinax/ai.devant",
+                        "object": "BinaryDataLoader",
+                        "flags": 1
+                    },
+                    "enabled": true
+                }
+            ]
+        }
+    ]
+}

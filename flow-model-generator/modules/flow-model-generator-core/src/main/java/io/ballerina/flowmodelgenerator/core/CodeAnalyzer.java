@@ -173,6 +173,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static io.ballerina.modelgenerator.commons.CommonUtils.isAgentClass;
+import static io.ballerina.modelgenerator.commons.CommonUtils.isAiDataLoader;
 import static io.ballerina.modelgenerator.commons.CommonUtils.isAiEmbeddingProvider;
 import static io.ballerina.modelgenerator.commons.CommonUtils.isAiModelModule;
 import static io.ballerina.modelgenerator.commons.CommonUtils.isAiModelProvider;
@@ -1324,6 +1325,8 @@ public class CodeAnalyzer extends NodeVisitor {
             startNode(NodeKind.VECTOR_KNOWLEDGE_BASE, newExpressionNode);
         } else if (isAiVectorStore(classSymbol)) {
             startNode(NodeKind.VECTOR_STORE, newExpressionNode);
+        } else if (isAiDataLoader(classSymbol)) {
+            startNode(NodeKind.DATA_LOADER, newExpressionNode);
         } else if (isAIModel(classSymbol)) {
             startNode(NodeKind.CLASS_INIT, newExpressionNode);
         } else if (classSymbol.qualifiers().contains(Qualifier.CLIENT)) {
@@ -1385,6 +1388,9 @@ public class CodeAnalyzer extends NodeVisitor {
         }
         if (isAiVectorStore(classSymbol)) {
             return FunctionData.Kind.VECTOR_STORE;
+        }
+        if (isAiDataLoader(classSymbol)) {
+            return FunctionData.Kind.DATA_LOADER;
         }
         return FunctionData.Kind.CONNECTOR;
     }

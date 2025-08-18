@@ -34,6 +34,7 @@ import io.ballerina.flowmodelgenerator.core.model.node.CommentBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.CommitBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.ConfigVariableBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.ContinueBuilder;
+import io.ballerina.flowmodelgenerator.core.model.node.DataLoaderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.DataMapperBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.DataMapperCallBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.DataMapperDefinitionBuilder;
@@ -159,6 +160,7 @@ public abstract class NodeBuilder implements DiagnosticHandler.DiagnosticCapable
         put(NodeKind.VECTOR_STORE, VectorStoreBuilder::new);
         put(NodeKind.VECTOR_KNOWLEDGE_BASE, VectorKnowledgeBaseBuilder::new);
         put(NodeKind.VECTOR_KNOWLEDGE_BASE_CALL, VectorKnowledgeBaseCallBuilder::new);
+        put(NodeKind.DATA_LOADER, DataLoaderBuilder::new);
     }};
 
     public static NodeBuilder getNodeFromKind(NodeKind kind) {

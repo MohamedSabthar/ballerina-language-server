@@ -136,6 +136,7 @@ public class FunctionData {
         MODEL_PROVIDER,
         EMBEDDING_PROVIDER,
         VECTOR_STORE,
+        DATA_LOADER,
         VECTOR_KNOWLEDGE_BASE,
         REMOTE,
         RESOURCE,

@@ -41,6 +41,7 @@ import io.ballerina.flowmodelgenerator.core.model.Metadata;
 import io.ballerina.flowmodelgenerator.core.model.NodeBuilder;
 import io.ballerina.flowmodelgenerator.core.model.NodeKind;
 import io.ballerina.flowmodelgenerator.core.model.node.AgentBuilder;
+import io.ballerina.flowmodelgenerator.core.model.node.DataLoaderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.EmbeddingProviderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.ModelProviderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.NPFunctionCall;
@@ -124,6 +125,10 @@ public class AvailableNodesGenerator {
 
     public JsonArray getAvailableEmbeddingProviders(LinePosition position) {
         return this.getAvailableItemsByCategory(position, Category.Name.EMBEDDING_PROVIDER, this::getEmbeddingProvider);
+    }
+
+    public JsonArray getAvailableDataLoaders(LinePosition position) {
+        return this.getAvailableItemsByCategory(position, Category.Name.DATA_LOADER, this::getDataLoader);
     }
 
     public JsonArray getAvailableVectorStores(LinePosition position) {
@@ -286,9 +291,15 @@ public class AvailableNodesGenerator {
                 new Codedata.Builder<>(null).node(NodeKind.EMBEDDING_PROVIDERS).build(),
                 !disableBallerinaAiNodes);
 
+        AvailableNode dataLoaders = new AvailableNode(
+                new Metadata.Builder<>(null).label(DataLoaderBuilder.LABEL)
+                        .description(DataLoaderBuilder.DESCRIPTION).build(),
+                new Codedata.Builder<>(null).node(NodeKind.DATA_LOADERS).build(),
+                !disableBallerinaAiNodes);
+
         Category ragCategory = new Category.Builder(null).name(Category.Name.RAG)
-                .items(List.of(vectorKnowledgeBase, chunkers, augmentUserQuery, vectorStore, embeddingProvider))
-                .build();
+                .items(List.of(vectorKnowledgeBase, dataLoaders, chunkers, augmentUserQuery, vectorStore,
+                        embeddingProvider)).build();
 
         AvailableNode agentCall = new AvailableNode(
                 new Metadata.Builder<>(null).label(AgentBuilder.LABEL)
@@ -433,6 +444,10 @@ public class AvailableNodesGenerator {
         return getCategory(symbol, classSymbol -> classSymbol.qualifiers().contains(Qualifier.CLIENT) &&
                 isAiEmbeddingProvider(classSymbol)
         );
+    }
+
+    private Optional<Category> getDataLoader(Symbol symbol) {
+        return getCategory(symbol, CommonUtils::isAiDataLoader);
     }
 
     private Optional<Category> getKnowledgeBase(Symbol symbol) {

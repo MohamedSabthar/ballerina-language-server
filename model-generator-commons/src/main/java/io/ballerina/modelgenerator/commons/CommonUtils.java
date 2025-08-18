@@ -97,6 +97,7 @@ public class CommonUtils {
             Pattern.compile("(\\w+)/([\\w.]+):([^:]+):(\\w+)[|]?");
     private static final String VECTOR_KNOWLEDGE_BASE_TYPE_NAME = "VectorKnowledgeBase";
     private static final String EMBEDDING_PROVIDER_TYPE_NAME = "EmbeddingProvider";
+    private static final String DATA_LOADER_TYPE_NAME = "DataLoader";
     private static final String MODEL_PROVIDER_TYPE_NAME = "ModelProvider";
     private static final String VECTOR_STORE_TYPE_NAME = "VectorStore";
     public static final String BALLERINA_ORG_NAME = "ballerina";
@@ -990,6 +991,11 @@ public class CommonUtils {
     public static boolean isAiEmbeddingProvider(Symbol symbol) {
         ClassSymbol classSymbol = getClassSymbol(symbol);
         return classSymbol != null && hasAiTypeInclusion(classSymbol, EMBEDDING_PROVIDER_TYPE_NAME);
+    }
+
+    public static boolean isAiDataLoader(Symbol symbol) {
+        ClassSymbol classSymbol = getClassSymbol(symbol);
+        return classSymbol != null && hasAiTypeInclusion(classSymbol, DATA_LOADER_TYPE_NAME);
     }
 
     private static ClassSymbol getClassSymbol(Symbol symbol) {
