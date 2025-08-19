@@ -4,8 +4,8 @@
     "categories": [
       {
         "metadata": {
-          "label": "",
-          "description": ""
+          "label": "Data Loaders",
+          "description": "Data loaders available in the integration"
         },
         "items": [
           {
