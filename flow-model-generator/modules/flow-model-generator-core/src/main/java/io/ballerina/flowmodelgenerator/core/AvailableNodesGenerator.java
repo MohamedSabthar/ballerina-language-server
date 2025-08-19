@@ -41,6 +41,7 @@ import io.ballerina.flowmodelgenerator.core.model.Metadata;
 import io.ballerina.flowmodelgenerator.core.model.NodeBuilder;
 import io.ballerina.flowmodelgenerator.core.model.NodeKind;
 import io.ballerina.flowmodelgenerator.core.model.node.AgentBuilder;
+import io.ballerina.flowmodelgenerator.core.model.node.ChunkerBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.DataLoaderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.EmbeddingProviderBuilder;
 import io.ballerina.flowmodelgenerator.core.model.node.ModelProviderBuilder;
@@ -137,6 +138,10 @@ public class AvailableNodesGenerator {
 
     public JsonArray getAvailableVectorKnowledgeBases(LinePosition position) {
         return this.getAvailableItemsByCategory(position, Category.Name.VECTOR_KNOWLEDGE_BASE, this::getKnowledgeBase);
+    }
+
+    public JsonArray getAvailableChunkers(LinePosition position) {
+        return this.getAvailableItemsByCategory(position, Category.Name.CHUNKERS, this::getChunkers);
     }
 
     private JsonArray getAvailableItemsByCategory(LinePosition position, Category.Name categoryName,
@@ -266,11 +271,17 @@ public class AvailableNodesGenerator {
                         .object(Ai.VECTOR_KNOWLEDGE_BASE_TYPE_NAME).symbol("init").build(),
                 !disableBallerinaAiNodes);
 
+//        AvailableNode chunkers = new AvailableNode(
+//                new Metadata.Builder<>(null).label(Ai.RECURSIVE_DOCUMENT_CHUNKER_LABEL).build(),
+//                new Codedata.Builder<>(null).node(NodeKind.FUNCTION_CALL).org(Ai.BALLERINA_ORG)
+//                        .module(Ai.AI_PACKAGE).packageName(Ai.AI_PACKAGE)
+//                        .symbol(Ai.CHUNK_DOCUMENT_RECURSIVELY_METHOD_NAME).build(),
+//                !disableBallerinaAiNodes);
+
         AvailableNode chunkers = new AvailableNode(
-                new Metadata.Builder<>(null).label(Ai.RECURSIVE_DOCUMENT_CHUNKER_LABEL).build(),
-                new Codedata.Builder<>(null).node(NodeKind.FUNCTION_CALL).org(Ai.BALLERINA_ORG)
-                        .module(Ai.AI_PACKAGE).packageName(Ai.AI_PACKAGE)
-                        .symbol(Ai.CHUNK_DOCUMENT_RECURSIVELY_METHOD_NAME).build(),
+                new Metadata.Builder<>(null).label(ChunkerBuilder.LABEL)
+                        .description(ChunkerBuilder.DESCRIPTION).build(),
+                new Codedata.Builder<>(null).node(NodeKind.CHUNKERS).build(),
                 !disableBallerinaAiNodes);
 
         AvailableNode augmentUserQuery = new AvailableNode(
@@ -456,5 +467,9 @@ public class AvailableNodesGenerator {
 
     private Optional<Category> getVectorStore(Symbol symbol) {
         return getCategory(symbol, CommonUtils::isAiVectorStore);
+    }
+
+    private Optional<Category> getChunkers(Symbol symbol) {
+        return getCategory(symbol, CommonUtils::isAiChunker);
     }
 }

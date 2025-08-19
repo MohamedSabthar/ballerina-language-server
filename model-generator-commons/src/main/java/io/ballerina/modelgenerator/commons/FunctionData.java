@@ -138,6 +138,7 @@ public class FunctionData {
         VECTOR_STORE,
         DATA_LOADER,
         VECTOR_KNOWLEDGE_BASE,
+        CHUNKER,
         REMOTE,
         RESOURCE,
         LISTENER_INIT,

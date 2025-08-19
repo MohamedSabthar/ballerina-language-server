@@ -448,8 +448,8 @@ public class FunctionDataBuilder {
     }
 
     private boolean isAiClassNodes(FunctionData.Kind functionKind) {
-        return functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE
-                || functionKind == FunctionData.Kind.VECTOR_STORE || functionKind == FunctionData.Kind.DATA_LOADER;
+        return functionKind == FunctionData.Kind.VECTOR_KNOWLEDGE_BASE || functionKind == FunctionData.Kind.VECTOR_STORE
+                || functionKind == FunctionData.Kind.DATA_LOADER || functionKind == FunctionData.Kind.CHUNKER;
     }
 
     private void checkLocalModule() {
