@@ -1,0 +1,88 @@
+{
+  "source": "generated_mcp_toolkit",
+  "flowNode": {
+    "id": "31",
+    "codedata": {
+      "node": "MCP_TOOL_KIT_CLASS"
+    },
+    "returning": false,
+    "properties": {
+      "toolKitName": {
+        "metadata": {
+          "label": "McpToolKitName",
+          "description": "Name of the MCP toolkit"
+        },
+        "valueType": "IDENTIFIER",
+        "valueTypeConstraint": "Global",
+        "value": "MyMcpToolKit",
+        "optional": false,
+        "editable": true,
+        "advanced": false,
+        "hidden": false
+      },
+      "permittedTools": {
+        "metadata": {
+          "label": "permittedTools",
+          "description": "List of permitted tools from the MCP server"
+        },
+        "valueType": "MULTIPLE_SELECT",
+        "valueTypeConstraint": "Global",
+        "value": [
+          "greetMe",
+          "greetMeAgain",
+          "check"
+        ],
+        "optional": false,
+        "editable": true,
+        "advanced": false,
+        "hidden": false
+      }
+    },
+    "flags": 0
+  },
+  "expectedResponse": {
+    "textEdits": {
+      "agents.bal": [
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 0
+            },
+            "end": {
+              "line": 0,
+              "character": 0
+            }
+          },
+          "newText": "import ballerina/ai;"
+        },
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 0
+            },
+            "end": {
+              "line": 0,
+              "character": 0
+            }
+          },
+          "newText": "import ballerina/mcp;"
+        },
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 0
+            },
+            "end": {
+              "line": 0,
+              "character": 0
+            }
+          },
+          "newText": "isolated class MyMcpToolKit {\n    *ai:McpBaseToolKit;\n    private final mcp:StreamableHttpClient mcpClient;\n    private final readonly & ai:ToolConfig[] tools;\n\n    public isolated function init(string serverUrl, mcp:Implementation info = {name: \"MCP\", version: \"1.0.0\"},\n        *mcp:StreamableHttpClientTransportConfig config) returns ai:Error? {\n        final map<ai:FunctionTool> permittedTools = {\n                \"greetMe\" : self.greetme,\n                \"check\" : self.'check,\n                \"greetMeAgain\" : self.greetmeagain\n        };\n        do {\n            self.mcpClient = check new mcp:StreamableHttpClient(serverUrl, config);\n            self.tools = check ai:getPermittedMcpToolConfigs(self.mcpClient, info, permittedTools).cloneReadOnly();\n        } on fail error e {\n            return error ai:Error(\"Failed to initialize MCP toolkit\", e);\n        }\n    }\n\n    public isolated function getTools() returns ai:ToolConfig[] => self.tools;\n\n    @ai:AgentTool\n    public isolated function greetme(mcp:CallToolParams params) returns mcp:CallToolResult|error {\n        return self.mcpClient->callTool(params);\n    }\n\n    @ai:AgentTool\n    public isolated function 'check(mcp:CallToolParams params) returns mcp:CallToolResult|error {\n        return self.mcpClient->callTool(params);\n    }\n\n    @ai:AgentTool\n    public isolated function greetmeagain(mcp:CallToolParams params) returns mcp:CallToolResult|error {\n        return self.mcpClient->callTool(params);\n    }\n}\n"
+        }
+      ]
+    }
+  }
+}

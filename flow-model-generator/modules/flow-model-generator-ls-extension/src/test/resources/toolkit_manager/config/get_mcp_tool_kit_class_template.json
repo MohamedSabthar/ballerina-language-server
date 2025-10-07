@@ -1,0 +1,45 @@
+{
+  "source": "generated_mcp_toolkit",
+  "codedata": {
+    "node": "MCP_TOOL_KIT_CLASS"
+  },
+  "expectedTemplate": {
+    "flowNode": {
+      "id": "31",
+      "codedata": {
+        "node": "MCP_TOOL_KIT_CLASS",
+        "isNew": true
+      },
+      "returning": false,
+      "properties": {
+        "toolKitName": {
+          "metadata": {
+            "label": "MCP Toolkit Name",
+            "description": "Name of the MCP toolkit"
+          },
+          "valueType": "IDENTIFIER",
+          "valueTypeConstraint": "Global",
+          "value": "McpToolKit",
+          "optional": false,
+          "editable": true,
+          "advanced": false,
+          "hidden": false
+        },
+        "permittedTools": {
+          "metadata": {
+            "label": "List of permitted tools from the MCP server",
+            "description": "Permitted List of MCP tools"
+          },
+          "valueType": "MULTIPLE_SELECT",
+          "valueTypeConstraint": "Global",
+          "value": [],
+          "optional": false,
+          "editable": true,
+          "advanced": false,
+          "hidden": false
+        }
+      },
+      "flags": 0
+    }
+  }
+}

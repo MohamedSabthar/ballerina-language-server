@@ -93,6 +93,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static io.ballerina.flowmodelgenerator.core.model.NodeKind.MCP_TOOL_KIT_CLASS;
+
 /**
  * Represents a builder for the flow node.
  *
@@ -163,6 +165,7 @@ public abstract class NodeBuilder implements DiagnosticHandler.DiagnosticCapable
         put(NodeKind.VECTOR_KNOWLEDGE_BASE_CALL, VectorKnowledgeBaseCallBuilder::new);
         put(NodeKind.DATA_LOADER, DataLoaderBuilder::new);
         put(NodeKind.CHUNKER, ChunkerBuilder::new);
+        put(MCP_TOOL_KIT_CLASS, McpToolKitClassBuilder::new);
     }};
 
     public static NodeBuilder getNodeFromKind(NodeKind kind) {
