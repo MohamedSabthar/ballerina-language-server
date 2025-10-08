@@ -93,5 +93,6 @@ public enum NodeKind {
     DATA_LOADERS,
     DATA_LOADER,
     CHUNKERS,
-    CHUNKER
+    CHUNKER,
+    MCP_TOOL_KIT
 }
